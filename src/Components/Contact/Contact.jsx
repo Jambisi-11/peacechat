@@ -1,13 +1,12 @@
-
 import React, { useState } from 'react';
 import {
   PencilSquareIcon,
   MagnifyingGlassIcon,
   UserIcon,
-  PlusIcon, 
-  EllipsisVerticalIcon 
+  PlusIcon,
+  EllipsisVerticalIcon,
 } from '@heroicons/react/24/solid';
-import ChatBody from '../chatBody/Chatbody'
+import ChatBody from '../chatBody/Chatbody';
 
 const Contact = () => {
   const [contacts, setContacts] = useState([]);
@@ -21,9 +20,6 @@ const Contact = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [image, setImage] = useState(null);
 
-
-
-
   const handleAddContact = (e) => {
     e.preventDefault();
     if (!name || !phone || !email || !phCode) {
@@ -36,7 +32,7 @@ const Contact = () => {
       name,
       phone,
       email,
-      image, 
+      image,
     };
 
     setContacts([...contacts, newContact]);
@@ -48,21 +44,19 @@ const Contact = () => {
   };
 
   const handleEditContact = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const updatedContacts = [...contacts];
-  updatedContacts[editIndex] = { name, phone, email, phCode, image };
-  setContacts(updatedContacts);
+    const updatedContacts = [...contacts];
+    updatedContacts[editIndex] = { name, phone, email, phCode, image };
+    setContacts(updatedContacts);
 
-  setIsEditModalOpen(false);
-  setName('');
-  setPhone('');
-  setEmail('');
-  setPhCode('');
-  setEditIndex(null);
-};
-
-
+    setIsEditModalOpen(false);
+    setName('');
+    setPhone('');
+    setEmail('');
+    setPhCode('');
+    setEditIndex(null);
+  };
 
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white flex justify-center p-6">
@@ -94,28 +88,27 @@ const Contact = () => {
               key={index}
               className="border border-gray-200 p-4 rounded shadow-sm dark:border-gray-700"
             >
-              <div className='flex justify-between'>
-              <div onClick={() => setSelectedContact(contact)} className="cursor-pointer">
-                <div className="flex items-center gap-3">
-  {contact.image && (
-    <img
-      src={contact.image}
-      alt={contact.name}
-      className="w-10 h-10 rounded-full object-cover"
-    />
-  )}
-  <p className="font-medium">{contact.name}</p>
-</div>
+              <div className="flex justify-between">
+                <div onClick={() => setSelectedContact(contact)} className="cursor-pointer">
+                  <div className="flex items-center gap-3">
+                    {contact.image && (
+                      <img
+                        src={contact.image}
+                        alt={contact.name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    )}
+                    <p className="font-medium">{contact.name}</p>
+                  </div>
 
-                {/* <p><span className="font-semibold">Name:</span> {contact.phCode}</p> */}
-              {/* <p><span className="font-semibold"></span>{contact.image} {contact.name}</p> */}
-              {/* <p><span className="font-semibold">Phone:</span> {contact.phone}</p>
+                  {/* <p><span className="font-semibold">Name:</span> {contact.phCode}</p> */}
+                  {/* <p><span className="font-semibold"></span>{contact.image} {contact.name}</p> */}
+                  {/* <p><span className="font-semibold">Phone:</span> {contact.phone}</p>
               <p><span className="font-semibold">Email:</span> {contact.email}</p> */}
-              </div>
-              
+                </div>
 
-              <div>
-                <EllipsisVerticalIcon 
+                <div>
+                  <EllipsisVerticalIcon
                     className="h-5 w-5 text-green-500 hover:text-gray-500 cursor-pointer"
                     onClick={() => {
                       const contact = contacts[index];
@@ -127,11 +120,8 @@ const Contact = () => {
                       setIsEditModalOpen(true);
                     }}
                   />
-
-          
+                </div>
               </div>
-              </div>
-              
             </li>
           ))}
         </ul>
@@ -142,7 +132,10 @@ const Contact = () => {
         <div className="fixed w- inset-0 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white  dark:bg-gray-900 rounded-lg shadow-lg   p-6 w-90 max-w-md">
             <h2 className="text-xl font-semibold text-green-500 mb-4">Add Contact</h2>
-            <form onSubmit={handleAddContact} className="space-y-4 flex flex-col items-center justify-center">
+            <form
+              onSubmit={handleAddContact}
+              className="space-y-4 flex flex-col items-center justify-center"
+            >
               <input
                 type="text"
                 placeholder="Full Name"
@@ -172,11 +165,11 @@ const Contact = () => {
                 className="w-65 border border-green-300 rounded px-4 py-2"
               />
               <input
-  type="file"
-  accept="image/*"
-  onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
-  className="w-65 border border-green-300 rounded px-4 py-2"
-/>
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              />
 
               <div className="flex justify-end gap-2">
                 <button
@@ -198,76 +191,77 @@ const Contact = () => {
         </div>
       )}
       {isEditModalOpen && (
-  <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-90 max-w-md">
-      <h2 className="text-xl font-semibold text-green-500 mb-4">Edit Contact</h2>
-      <form onSubmit={handleEditContact} className="space-y-4 flex flex-col items-center justify-center">
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-65 border border-green-300 rounded px-4 py-2"
-        />
-        <input
-          type="text"
-          placeholder="PH-Code (e.g., +63)"
-          value={phCode}
-          onChange={(e) => setPhCode(e.target.value)}
-          className="w-65 border border-green-300 rounded px-4 py-2"
-        />
-        <input
-          type="tel"
-          placeholder="Phone Number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="w-65 border border-green-300 rounded px-4 py-2"
-        />
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-65 border border-green-300 rounded px-4 py-2"
-        />
+        <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-90 max-w-md">
+            <h2 className="text-xl font-semibold text-green-500 mb-4">Edit Contact</h2>
+            <form
+              onSubmit={handleEditContact}
+              className="space-y-4 flex flex-col items-center justify-center"
+            >
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              />
+              <input
+                type="text"
+                placeholder="PH-Code (e.g., +63)"
+                value={phCode}
+                onChange={(e) => setPhCode(e.target.value)}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              />
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              />
 
-        <input
-  type="file"
-  accept="image/*"
-  onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
-  className="w-65 border border-green-300 rounded px-4 py-2"
-/>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              />
 
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={() => setIsEditModalOpen(false)}
-            className="px-4 py-2 rounded border text-green-500 border-green-300 hover:bg-gray-100"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white text-green-500 rounded hover:bg-blue-600"
-          >
-            Update
-          </button>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="px-4 py-2 rounded border text-green-500 border-green-300 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-500 text-white text-green-500 rounded hover:bg-blue-600"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-)}
-{selectedContact && (
-  <div className='ml-18'>
-    <div className="">
-      <ChatBody contact={selectedContact} onClose={() => setSelectedContact(null)} />
-    </div>
-  </div>
-)}
-
+      )}
+      {selectedContact && (
+        <div className="ml-18">
+          <div className="">
+            <ChatBody contact={selectedContact} onClose={() => setSelectedContact(null)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Contact;
- 

@@ -24,8 +24,6 @@ const Menu = ({ darkMode, setDarkMode }) => {
     // console.log("toggleDarkMode clicked. darkMode:", darkMode);
     setDarkMode(!darkMode);
   };
-// const Menu = () => {
-
 
 
 
