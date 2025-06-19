@@ -5,7 +5,7 @@ import { PencilSquareIcon, UserIcon, PlusIcon, MagnifyingGlassIcon } from '@hero
 
 const ChatLog = () => {
   return <div>
-    <div className="min-h-screen flex gap-18 m-0 w-[18em] bg-white text-black dark:bg-gray-900 dark:text-white">
+    <div className="min-h-screen flex gap-18 m-0 w-[20em] bg-white text-black dark:bg-gray-900 dark:text-white">
       <div>
       <div className="flex gap-36 mt-6">
         <div>
