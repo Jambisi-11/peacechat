@@ -169,7 +169,7 @@ const Menu = ({ darkMode, setDarkMode, activeView, setActiveView }) => {
     <div className="flex flex-col items-center justify-between w-16 min-h-screen py-6 bg-white dark:bg-gray-900 border-r dark:border-gray-800">
       {/* Top - Logo */}
       <div>
-        <img src={Logo} alt="Logo" className="w-8 h-8 mb-4 rounded-full" />
+        <img src={Logo} alt="Logo" className="w-8 h-8 mb-4 ml-2 rounded-full" />
         {menuItems.map(({ icon: Icon, key }) => (
           <div
             key={key}

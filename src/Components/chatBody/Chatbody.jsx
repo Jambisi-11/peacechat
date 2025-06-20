@@ -55,7 +55,7 @@ const ChatBody = ({ contact, onClose }) => {
   // }
 
   return (
- <div className="flex flex-col w-[68em] flex-1 h-screen bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700">
+ <div className="flex flex-col w-[68em] flex-1 h-screen  dark:border-gray-700">
     {/* Header */}
       <div className="flex justify-between items-center px-4 py-2 text-white rounded-t">
         <div className="flex items-center gap-3">

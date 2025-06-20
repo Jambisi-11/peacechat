@@ -398,7 +398,7 @@ const Contact = ({ onSelectContact }) => {
   };
 
   return (
-    <div className="h-screen w-[22em] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-6 overflow-y-auto">
+    <div className="h-screen w-[20em] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-6 overflow-y-auto">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -461,7 +461,7 @@ const Contact = ({ onSelectContact }) => {
 
       {/* Add Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0  flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-90 max-w-md">
             <h2 className="text-xl font-semibold text-green-500 mb-4">Add Contact</h2>
             <form onSubmit={handleAddContact} className="space-y-4">
@@ -486,7 +486,7 @@ const Contact = ({ onSelectContact }) => {
 
       {/* Edit Modal */}
       {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0  flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 w-90 max-w-md">
             <h2 className="text-xl font-semibold text-green-500 mb-4">Edit Contact</h2>
             <form onSubmit={handleEditContact} className="space-y-4">

@@ -110,7 +110,7 @@ const ChatLog = ({ onSelectContact }) => {
   }, [contactIds]);
 
   return (
-    <div className="h-screen w-[22em] bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-6">
+    <div className="h-screen w-[20em] bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-700 p-6">
    <div className="w-full max-w-md">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
