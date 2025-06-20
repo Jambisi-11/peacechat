@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   PencilSquareIcon,
   MagnifyingGlassIcon,
@@ -7,6 +7,7 @@ import {
   EllipsisVerticalIcon,
 } from '@heroicons/react/24/solid';
 import ChatBody from '../chatBody/Chatbody';
+import axios from 'axios';
 
 const Contact = () => {
   const [contacts, setContacts] = useState([]);
@@ -20,7 +21,20 @@ const Contact = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [image, setImage] = useState(null);
 
-  const handleAddContact = (e) => {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImage(reader.result); // base64 string
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddContact = async (e) => {
     e.preventDefault();
     if (!name || !phone || !email || !phCode) {
       alert('Please fill in all fields');
@@ -35,12 +49,18 @@ const Contact = () => {
       image,
     };
 
-    setContacts([...contacts, newContact]);
-    setName('');
-    setPhone('');
-    setEmail('');
-    setPhCode('');
-    setIsModalOpen(false); // close modal
+    try {
+      const res = await axios.post('http://localhost:5000/api/contacts', newContact);
+      setContacts([...contacts, res.data]); // Add saved contact to state
+      setName('');
+      setPhone('');
+      setEmail('');
+      setPhCode('');
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Failed to save contact:', error);
+      alert('Failed to save contact.');
+    }
   };
 
   const handleEditContact = (e) => {
@@ -57,6 +77,19 @@ const Contact = () => {
     setPhCode('');
     setEditIndex(null);
   };
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/contacts');
+        setContacts(res.data);
+      } catch (err) {
+        console.error('Failed to fetch contacts', err);
+      }
+    };
+
+    fetchContacts();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white flex justify-center p-6">
@@ -164,10 +197,16 @@ const Contact = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-65 border border-green-300 rounded px-4 py-2"
               />
-              <input
+              {/* <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              /> */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
                 className="w-65 border border-green-300 rounded px-4 py-2"
               />
 
@@ -227,10 +266,17 @@ const Contact = () => {
                 className="w-65 border border-green-300 rounded px-4 py-2"
               />
 
-              <input
+              {/* <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))}
+                className="w-65 border border-green-300 rounded px-4 py-2"
+              /> */}
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
                 className="w-65 border border-green-300 rounded px-4 py-2"
               />
 
