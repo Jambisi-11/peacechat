@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Menu from '../Menus/Menu';
 import ChatLog from '../chatLog/ChatLog';
 import Contact from '../Contact/Contact';
@@ -10,6 +12,26 @@ import ChatBody from '../chatBody/Chatbody';
 const Home = ({ darkMode, setDarkMode }) => {
   const [activeView, setActiveView] = useState('chat');
   const [selectedContact, setSelectedContact] = useState(null);
+  const navigate = useNavigate();
+
+  // ✅ Safe way to parse user from localStorage
+  const user = (() => {
+    try {
+      const raw = localStorage.getItem('user');
+      if (raw && raw !== 'undefined') return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  })();
+
+  useEffect(() => {
+    if (!user) navigate('/login');
+  }, [user, navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/login');
+  };
 
   const renderMainView = () => {
     switch (activeView) {
@@ -40,10 +62,10 @@ const Home = ({ darkMode, setDarkMode }) => {
 
       {/* Main View and Chat Body */}
       <div className="flex flex-grow">
-        {/* Sidebar panel (ChatLog, Contact, etc.) */}
-        <div className="w-[21em]  dark:border-gray-800 overflow-y-auto">{renderMainView()}</div>
+        <div className="w-[21em] dark:border-gray-800 overflow-y-auto">
+          {renderMainView()}
+        </div>
 
-        {/* Chat Body panel */}
         <div className="flex-grow h-screen">
           {selectedContact ? (
             <ChatBody contact={selectedContact} />
@@ -54,6 +76,14 @@ const Home = ({ darkMode, setDarkMode }) => {
           )}
         </div>
       </div>
+
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded"
+      >
+        Logout
+      </button>
     </div>
   );
 };

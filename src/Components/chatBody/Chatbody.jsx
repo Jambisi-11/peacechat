@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from 'react';
+
+
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import io from 'socket.io-client';
 import {
   PaperAirplaneIcon,
   EllipsisVerticalIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/solid';
 
+const socket = io('http://localhost:5000'); // Adjust if your backend is hosted elsewhere
+
 const ChatBody = ({ contact, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [search, setSearch] = useState('');
   const [showMenu, setShowMenu] = useState(false);
+  const messagesEndRef = useRef(null);
 
-  // 🔁 Load messages for the selected contact
   useEffect(() => {
+    if (!contact) return;
+
     const fetchMessages = async () => {
-      if (!contact) return;
       try {
         const res = await axios.get(`http://localhost:5000/api/messages/${contact._id}`);
         setMessages(res.data);
@@ -25,9 +31,21 @@ const ChatBody = ({ contact, onClose }) => {
     };
 
     fetchMessages();
+
+    // Join socket room
+    socket.emit('joinRoom', contact._id);
+
+    // Listen for incoming messages
+    socket.on('receiveMessage', (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    return () => {
+      socket.emit('leaveRoom', contact._id);
+      socket.off('receiveMessage');
+    };
   }, [contact]);
 
-  // 📤 Send a message
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -40,23 +58,20 @@ const ChatBody = ({ contact, onClose }) => {
     try {
       const res = await axios.post('http://localhost:5000/api/messages', newMessage);
       setMessages((prev) => [...prev, res.data]);
+      socket.emit('sendMessage', { room: contact._id, message: res.data });
       setInput('');
     } catch (err) {
       console.error('Failed to send message', err);
     }
   };
 
-  // if (!contact) {
-  //   return (
-  //     <div className="flex-1 flex w-[68em] h-[41em] items-center justify-center border-l dark:border-gray-800 bg-white dark:bg-gray-900 text-gray-400">
-  //       <p className="text-lg">Select a contact to start chatting</p>
-  //     </div>
-  //   );
-  // }
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   return (
- <div className="flex flex-col w-[68em] flex-1 h-screen  dark:border-gray-700">
-    {/* Header */}
+    <div className="flex flex-col w-[68em] flex-1 h-screen dark:border-gray-700">
+      {/* Header */}
       <div className="flex justify-between items-center px-4 py-2 text-white rounded-t">
         <div className="flex items-center gap-3">
           {contact.image && (
@@ -127,6 +142,7 @@ const ChatBody = ({ contact, onClose }) => {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
