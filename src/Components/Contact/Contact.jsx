@@ -19,18 +19,35 @@ const Contact = ({ onSelectContact }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [image, setImage] = useState(null);
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/api/contacts');
-        setContacts(res.data);
-      } catch (err) {
-        console.error('Failed to fetch contacts', err);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchContacts = async () => {
+  //     try {
+  //       const res = await axios.get('http://localhost:5000/api/contacts');
+  //       setContacts(res.data);
+  //     } catch (err) {
+  //       console.error('Failed to fetch contacts', err);
+  //     }
+  //   };
 
-    fetchContacts();
-  }, []);
+  //   fetchContacts();
+  // }, []);
+
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || !user._id) return;
+
+  const fetchContacts = async () => {
+    try {
+      const res = await axios.get(`http://localhost:5000/api/contacts/${user._id}`);
+      setContacts(res.data);
+    } catch (err) {
+      console.error('Failed to fetch contacts', err);
+    }
+  };
+
+  fetchContacts();
+}, []);
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -43,29 +60,68 @@ const Contact = ({ onSelectContact }) => {
     if (file) reader.readAsDataURL(file);
   };
 
-  const handleAddContact = async (e) => {
-    e.preventDefault();
-    if (!name || !phone || !email || !phCode) {
-      alert('Please fill in all fields');
-      return;
-    }
+  // const handleAddContact = async (e) => {
+  //   e.preventDefault();
+  //   if (!name || !phone || !email || !phCode) {
+  //     alert('Please fill in all fields');
+  //     return;
+  //   }
 
-    const newContact = { phCode, name, phone, email, image };
+  //   const newContact = { phCode, name, phone, email, image };
 
-    try {
-      const res = await axios.post('http://localhost:5000/api/contacts', newContact);
-      setContacts([...contacts, res.data]);
-      setName('');
-      setPhone('');
-      setEmail('');
-      setPhCode('');
-      setImage(null);
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('Failed to save contact:', error);
-      alert('Failed to save contact.');
-    }
+  //   try {
+  //     const res = await axios.post('http://localhost:5000/api/contacts', newContact);
+  //     setContacts([...contacts, res.data]);
+  //     setName('');
+  //     setPhone('');
+  //     setEmail('');
+  //     setPhCode('');
+  //     setImage(null);
+  //     setIsModalOpen(false);
+  //   } catch (error) {
+  //     console.error('Failed to save contact:', error);
+  //     alert('Failed to save contact.');
+  //   }
+  // };
+
+ const handleAddContact = async (e) => {
+  e.preventDefault();
+
+  if (!name || !phone || !email || !phCode) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || !user._id) {
+    alert("User not logged in.");
+    return;
+  }
+
+  const newContact = {
+    userId: user._id,
+    phCode,
+    name,
+    phone,
+    email,
+    image,
   };
+
+  try {
+    const res = await axios.post("http://localhost:5000/api/contacts", newContact);
+    setContacts([...contacts, res.data]);
+    setName('');
+    setPhone('');
+    setEmail('');
+    setPhCode('');
+    setImage(null);
+    setIsModalOpen(false);
+  } catch (error) {
+    console.error("❌ Failed to save contact:", error.response?.data || error.message);
+    alert('Failed to save contact.');
+  }
+};
+
 
   const handleEditContact = (e) => {
     e.preventDefault();

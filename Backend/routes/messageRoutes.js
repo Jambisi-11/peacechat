@@ -1,8 +1,46 @@
+// const express = require("express");
+// const router = express.Router(); // 👈 router is defined here
+// const Message = require("../models/Message");
+
+// // Now it's safe to define routes
+// router.get("/with-messages/ids", async (req, res) => {
+//   try {
+//     const ids = await Message.distinct("contactId");
+//     res.json(ids);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// // Get messages for a contact
+// router.get("/:contactId", async (req, res) => {
+//   try {
+//     const messages = await Message.find({ contactId: req.params.contactId });
+//     res.json(messages);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+// // Add a new message
+// router.post("/", async (req, res) => {
+//   try {
+//     const newMessage = new Message(req.body);
+//     const saved = await newMessage.save();
+//     res.json(saved);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// });
+
+// module.exports = router;
+
+
 const express = require("express");
-const router = express.Router(); // 👈 router is defined here
+const router = express.Router();
 const Message = require("../models/Message");
 
-// Now it's safe to define routes
+// ✅ Get distinct contact IDs with messages
 router.get("/with-messages/ids", async (req, res) => {
   try {
     const ids = await Message.distinct("contactId");
@@ -12,7 +50,7 @@ router.get("/with-messages/ids", async (req, res) => {
   }
 });
 
-// Get messages for a contact
+// ✅ Get all messages for a specific contact
 router.get("/:contactId", async (req, res) => {
   try {
     const messages = await Message.find({ contactId: req.params.contactId });
@@ -22,12 +60,12 @@ router.get("/:contactId", async (req, res) => {
   }
 });
 
-// Add a new message
+// ✅ Create a new message
 router.post("/", async (req, res) => {
   try {
     const newMessage = new Message(req.body);
-    const saved = await newMessage.save();
-    res.json(saved);
+    const savedMessage = await newMessage.save();
+    res.json(savedMessage);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
