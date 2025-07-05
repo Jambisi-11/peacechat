@@ -32,6 +32,9 @@ const Login = () => {
       console.error('❌ Login failed:', err.response?.data || err.message);
       setMessage(err.response?.data?.message || 'Error logging in.');
     }
+    console.log("🔑 Provided password:", password);
+console.log("🔒 Stored hash:", user.password);
+console.log("🔍 Is match:", isMatch);
   };
 
   return (
@@ -75,6 +78,7 @@ const Login = () => {
       </form>
     </div>
   );
+  
 };
 
 export default Login;

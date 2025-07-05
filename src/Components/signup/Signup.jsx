@@ -104,6 +104,8 @@ const Signup = () => {
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error signing up.');
     }
+    console.log("🔐 Original password:", password);
+console.log("🔐 Hashed password:", hashedPassword);
   };
 
   return (
@@ -162,6 +164,7 @@ const Signup = () => {
             Login
           </a>
         </p>
+        
       </form>
     </div>
   );
